@@ -15,7 +15,6 @@ app.get('/', (req, res) => {
     res.send('Welcome To Unilog')
 })
 
-//route
 app.use('/dash', postsRouter)
 app.use('/users', usersRouter)
 
