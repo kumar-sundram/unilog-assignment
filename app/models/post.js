@@ -3,25 +3,24 @@ const validator = require('validator')
 
 const { Schema } = mongoose
 const postSchema = new Schema({
-    text: {
-        type: String,
-        required: true
-    },
-    image: [{
-        type: String,
-    }],
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+  text: {
+    type: String,
+  },
+  image: [{
+    type: String,
+  }],
+  user: {
+    type: {id:Schema.Types.ObjectId,name:Schema.Types.String},
+    ref: 'User'
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 })
 
-const Posts = mongoose.model('posts', postSchema)
+const Dash = mongoose.model('Dash', postSchema)
 
 module.exports = {
-    Posts
+  Dash
 }

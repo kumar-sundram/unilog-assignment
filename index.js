@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
     res.send('Welcome To Unilog')
 })
 
-app.use('/post', postsRouter)
+app.use('/dash', postsRouter)
 app.use('/users', usersRouter)
 
 app.listen(port, () => {

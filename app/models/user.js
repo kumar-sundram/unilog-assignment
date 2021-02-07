@@ -13,10 +13,10 @@ const userSchema = new Schema({
         unique: true,
         required: true,
         validate: {
-            validator: function(value) {
+            validator: function (value) {
                 return validator.isEmail(value)
             },
-            message: function() {
+            message: function () {
                 return 'invalid email format'
             }
         }
@@ -34,7 +34,7 @@ const userSchema = new Schema({
     }]
 })
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
     if (this.isNew) {
         bcryptjs.genSalt(10).then((salt) => {
             bcryptjs.hash(this.password, salt)
@@ -48,11 +48,11 @@ userSchema.pre('save', function(next) {
     }
 })
 
-userSchema.statics.findByEmailAndPassword = function(email, password) {
+userSchema.statics.findByEmailAndPassword = function (email, password) {
     const User = this
     return User.findOne({
-            email
-        })
+        email
+    })
         .then((user) => {
             if (user) {
                 return bcryptjs.compare(password, user.password).then((result) => {
@@ -70,36 +70,35 @@ userSchema.statics.findByEmailAndPassword = function(email, password) {
             return Promise.reject(err)
         })
 }
-userSchema.methods.generateToken = function() {
+userSchema.methods.generateToken = function () {
     const user = this
     const tokenData = {
         userId: user._id,
-        role: user.role,
-        firstName: user.firstName
+        name: user.name
     }
-    const token = jwt.sign(tokenData, 'sachin123')
+    const token = jwt.sign(tokenData, 'kumar123')
     user.tokens.push({
         token
     })
     return user.save().then((user) => {
-        return token
+        return { token: token, user: user.name }
     }).catch((err) => {
         return err
     })
 }
 
-userSchema.statics.findByToken = function(token) {
+userSchema.statics.findByToken = function (token) {
     const User = this
     let tokenData
     try {
-        tokenData = jwt.verify(token, 'sachin123')
+        tokenData = jwt.verify(token, 'kumar123')
     } catch (err) {
         return Promise.reject(err)
     }
     return User.findOne({
-            _id: tokenData.userId,
-            'tokens.token': token
-        })
+        _id: tokenData.userId,
+        'tokens.token': token
+    })
         .then((user) => {
             console.log('insideFindByToken')
             return Promise.resolve(user)
